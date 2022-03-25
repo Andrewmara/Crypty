@@ -14,6 +14,10 @@ from sklearn.datasets import load_iris
 import pandas as pd
 from IPython.display import display
 import pandas as pd
+import datetime
+import os
+ 
+dir = 'C:/Users/Jana/Documents/GitHub/Crypty/data-set'
 
 pp = pprint.PrettyPrinter(indent=4)
 url = f'https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest'
@@ -84,10 +88,14 @@ data = pd.read_csv(f"data-set/{cryp}_all_time.csv")
 print("Shape of Dataset is: ", data.shape, "\n")
 print(data.head())
 
-data.dropna()
-plt.figure(figsize=(10, 4))
-plt.title("SOL Price INR")
-plt.xlabel("Date")
-plt.ylabel("Close")
-plt.plot(data["Close"])
-plt.show()
+from autots import AutoTS
+model = AutoTS(forecast_length=15, frequency='infer', ensemble='simple', drop_data_older_than_periods=200)
+model = model.fit(data, date_col='Date', value_col='Close', id_col=None)
+ 
+prediction = model.predict()
+forecast = prediction.forecast
+print(f"{cryp} Prediction")
+print(forecast)
+
+for f in os.listdir(dir):
+    os.remove(os.path.join(dir, f))
