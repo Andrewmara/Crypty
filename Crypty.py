@@ -5,27 +5,24 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from seaborn import regression
 
+cryp = input("Inserisci crypto")
 
 sns.set()
 plt.style.use('seaborn-whitegrid')
-# initialise scraper without time interval
-scraper = CmcScraper("SOL")
 
-# get raw data as list of list
+scraper = CmcScraper(f"{cryp}")
+
 headers, data = scraper.get_data()
 
-# get data in a json format
 xrp_json_data = scraper.get_data("json")
 
-# export the data as csv file, you can also pass optional `name` parameter
-scraper.export("csv", name="data-set/SOL_all_time")
+scraper.export("csv", name = f"data-set/{cryp}_all_time")
 
-# Pandas dataFrame for the same data
 df = scraper.get_dataframe()
 
 
 
-data = pd.read_csv("data-set/{cryp}.csv")
+data = pd.read_csv(f"data-set/{cryp}_all_time.csv")
 print("Shape of Dataset is: ",data.shape,"\n")
 print(data.head())
 
@@ -36,4 +33,5 @@ plt.xlabel("Date")
 plt.ylabel("Close")
 plt.plot(data["Close"])
 plt.show()
+
 
